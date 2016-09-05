@@ -28,6 +28,9 @@ class Markov(object):
         '''
         return self.Q
 
+    def get_number_of_states(self):
+        return self.N
+
     def set_observations(self, observations):
         '''
         Set possible observations
@@ -76,12 +79,15 @@ class Markov(object):
     def get_initial_state_distribution(self):
         return self.PI
 
-    def set_observation_sequence(self, sequence):
+    def set_observation_sequence(self, sequence, sequence_length):
         '''
         Sets the observation sequence.
         '''
-        self.O = sequence
-        self.T = len(self.O)
+        if len(sequence) == sequence_length:
+            self.O.append(sequence)
+        else:
+            self.O = sequence
+        self.T = sequence_length
 
     def get_observation_sequence(self):
         return self.O

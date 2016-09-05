@@ -23,6 +23,7 @@ def display_help():
 def display_algorithms():
     print('Select one of the following algorithms:')
     print('(1) - Direct Method')
+    print('(2) - Alpha Pass')
 
 def create_probability_matrix(header_states, row_states):
     '''
@@ -74,12 +75,23 @@ def main():
                 initial_state_distribution[state] = input('%s -> ' % (state))
             model.set_initial_state_distribution(initial_state_distribution)
         elif action == 'o':
-            print('Enter observation sequence [comma delimited]')
-            observation_sequence = [sequence.strip() for sequence in input().split(',')]
-            model.set_observation_sequence(observation_sequence)
+            action = input('Would you like all permutations? [y/n] >> ').lower()
+            if action == 'y':
+                sequence_length = int(input('Enter the sequence length >> '))
+                observations = model.get_observations()
+                observation_sequence = list(itertools.product(
+                    observations, repeat=int(sequence_length)))
+            elif action == 'n':
+                prompt = 'Enter observation sequence [comma delimited] >> '
+                observation_sequence = [sequence.strip() for sequence in input(prompt).split(',')]
+                sequence_length = len(observation_sequence)
+            else:
+                print('Unknown input')
+                continue
+            model.set_observation_sequence(observation_sequence, sequence_length)
         elif action == 'x':
             states = model.get_states()
-            sequence_length = input('Enter the sequence length [integer]\n')
+            sequence_length = input('Enter the sequence length >> ')
             state_sequence = list(itertools.product(states, repeat=int(sequence_length)))
             model.set_state_sequence(state_sequence)
         elif action == 's':
@@ -88,18 +100,16 @@ def main():
             action = input('>> ')
             if action is '1':
                 algorithm = algorithms.Direct_Method(model)
+            elif action is '2':
+                algorithm = algorithms.Alpha_Pass(model)
             else:
                 print('Unknown input')
                 algorithm = None
+        elif action == 'r':
+            print('Executing %s' % (algorithm.name))
+            algorithm.calculate_probabilities()
         elif action == 'h':
             display_help()
-        elif action == 'r':
-            #try:
-            print('Executing %s' % (algorithm.name))
-            algorithm.build_expressions()
-            algorithm.calculate_probabilities()
-            #except:
-            #    print('An algorithm has not yet been selected!\n')
         elif action == 'e':
             exit(0)
         else:
