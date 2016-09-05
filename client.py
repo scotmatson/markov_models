@@ -3,7 +3,7 @@
 
 import itertools
 from markov import Markov
-from direct_method import Direct_Method
+import algorithms
 
 def display_help():
     ''' Displays the help menu '''
@@ -87,7 +87,7 @@ def main():
             display_algorithms()
             action = input('>> ')
             if action is '1':
-                algorithm = Direct_Method(model)
+                algorithm = algorithms.Direct_Method(model)
             else:
                 print('Unknown input')
                 algorithm = None
@@ -96,7 +96,8 @@ def main():
         elif action == 'r':
             #try:
             print('Executing %s' % (algorithm.name))
-            algorithm.calculate_probability()
+            algorithm.build_expressions()
+            algorithm.calculate_probabilities()
             #except:
             #    print('An algorithm has not yet been selected!\n')
         elif action == 'e':

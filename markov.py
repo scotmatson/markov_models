@@ -48,11 +48,11 @@ class Markov(object):
         '''
         self.A = probabilities
 
-    def get_state_transition_probabilities(self):
+    def get_state_transition_probability(self, previous_state, next_state):
         '''
         Returns the state transition probabiliy matrix
         '''
-        return self.A
+        return self.A[previous_state, next_state]
 
     def set_observation_probabilities(self, probabilities):
         '''
@@ -102,5 +102,13 @@ class Markov(object):
         return self.X
 
     # DEBUGGING / PRINTING
+    def display_state_transition_probabilities(self):
+        '''
+        '''
+        print(self.A)
+
     def display_observation_probabilities(self):
+        '''
+        '''
         print(self.B)
+
